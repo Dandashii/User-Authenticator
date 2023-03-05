@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Home from "./pages/home";
+import Profile from "./pages/profile";
+import './assets/styling/index.sass';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.querySelector('#root'));
+
 root.render(
-  <React.StrictMode>
-      <BrowserRouter>
-          <Router>
-          </Router>
-      </BrowserRouter>
-  </React.StrictMode>
+    <BrowserRouter>
+        <Routes>
+            <Route index path="/" element={<Home />}/>
+            <Route path="profile" element={<Profile />} />
+        </Routes>
+    </BrowserRouter>
 );
+

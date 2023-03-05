@@ -1,7 +1,7 @@
-const Footer = (props) => {
+const Footer = () => {
 	return (
 		<footer>
-
+			<p>By Mohammad Aldandashi</p>
 		</footer>
 	);
 }

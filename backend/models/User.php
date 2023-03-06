@@ -73,9 +73,19 @@ class User
 		return $this->phoneNo;
 	}
 
-	public function save($connection, $table): void
+	public function register($connection, $table): void
 	{
 		$stmt = $connection->prepare('INSERT INTO ' . $table . '(name, email, password, jobTitle, phoneNo) values(?, ?, ?, ? ,?)');
+	}
+
+	public function login($connection, $table): void
+	{
+
+	}
+
+	public function logout($connection, $table): void
+	{
+
 	}
 
 	public static function findUser($method): string

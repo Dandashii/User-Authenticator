@@ -2,34 +2,59 @@ import React from "react";
 import Header from "../../layout/Header";
 import Footer from "../../layout/Footer";
 import axios from "axios";
+import {sendData} from "../../utils/api";
+import {displayPopup} from "../../utils/popup";
+import {closePopup} from "../../utils/popup";
+import PopupForm from "../../components/Popup";
 
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-
+			pageTitle: 'Profile Page',
+			popup: '',
+			displayPopup: false,
+			user: {
+				name: '',
+				email: '',
+				password: ''
+			}
 		};
-		this.handleLogout = this.handleLogout.bind(this)
+	}
+
+	componentDidMount() {
+		axios.get('http://localhost:8080/getProfile.php')
+			.then(response => {
+				this.setState({
+					user: {
+						name: response.data.name,
+						email: response.data.password,
+						password: response.data.password
+					}
+				});
+			}).catch(error => {
+			console.log(error);
+		});
+	}
+
+	componentWillUnmount() {
+		this.clearStates();
+	}
+
+	clearStates = () => {
+		this.setState({
+			displayPopup: false,
+			popupType: '',
+			user: {
+				name: '',
+				email: '',
+				password: ''
+			}
+		})
 	}
 
 	handleLogout() {
-		axios.post('http://localhost:8080/logout.php')
-			.then(response => {
-				if(response.data.error) {
-					this.setState({
-						error: {
-							target: response.data.error.target,
-							type: response.data.error.type,
-							desc: response.data.error.desc,
-							display: true,
-						}
-					});
-				} else {
-
-				}
-			}).catch(error => {
-			console.error(error);
-		});
+		sendData();
 	}
 
 	render() {
@@ -42,6 +67,7 @@ export default class Profile extends React.Component {
 						LOGOUT
 					</button>
 				</div>
+				<PopupForm/>
 				<Footer/>
 			</>
 		);

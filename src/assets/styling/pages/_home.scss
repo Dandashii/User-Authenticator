@@ -1,0 +1,37 @@
+@import "../globals/mixins";
+@import "../globals/variables";
+@import "../components/popup";
+
+.popup-btns-container {
+  @include flex-center();
+  gap: 100px;
+
+  .popup-button {
+    background: none;
+    border: none;
+    @include shadow();
+    @include border-radius(25px);
+    @include box-dimensions(140px, 50px);
+    @include flex-center();
+    gap: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    &:hover {
+      cursor: pointer;
+    }
+
+    iconify-icon {
+      @include icon-size(20px);
+    }
+  }
+
+  .login-popup-btn {
+    background: white;
+    color: black;
+  }
+
+  .register-popup-btn {
+    background: #848484;
+    color: white;
+  }
+}

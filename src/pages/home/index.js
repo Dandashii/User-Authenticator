@@ -4,6 +4,8 @@ import Footer from "../../layout/Footer";
 import PopupForm from "../../components/Popup";
 import axios from "axios";
 import {sendData} from "../../utils/api";
+import {closePopup, displayPopup} from "../../utils/popup";
+import '../../assets/styling/pages/_home.scss';
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -19,20 +21,6 @@ export default class Home extends React.Component {
 				display: false
 			}
 		};
-	}
-
-	displayPopup = (popupType) => {
-		this.setState({
-			popupType: popupType,
-			displayPopup: true
-		});
-	}
-
-	closePopup = () => {
-		this.setState({
-			popupType: '',
-			displayPopup: false
-		});
 	}
 
 	clearStates = () => {
@@ -74,18 +62,7 @@ export default class Home extends React.Component {
 			window.location.href = 'http://localhost:3000/profile';
 		}
 
-		sendData(event, formData, 'login.php', onSuccess);
-	}
-
-	handlePassword = (event) => {
-		event.preventDefault();
-		const formData = {
-			password: this.state.formData.password,
-			newPassword: this.state.formData.newPassword,
-			confirmPassword: this.state.formData.confirmPassword
-		};
-
-		sendData(event, formData, 'reset-password.php');
+		sendData(this, event, formData, 'login.php', onSuccess);
 	}
 
 	handleRegistration = (event) => {
@@ -98,13 +75,10 @@ export default class Home extends React.Component {
 		};
 
 		const onSuccess = () => {
-			this.setState({
-				displayPopup: true,
-				popupType: 'Login'
-			});
+			displayPopup(this, 'Login');
 		};
 
-		sendData(event, formData, 'register.php', onSuccess);
+		sendData(this, event, formData, 'register.php', onSuccess);
 	}
 
 	render() {
@@ -113,25 +87,25 @@ export default class Home extends React.Component {
 				<Header pageTitle={this.state.pageTitle}/>
 
 				{!this.state.displayPopup &&
-				<button onClick={() => this.displayPopup('Login')} type={'button'} className={'popup-button login-popup-btn'}>
-					LOGIN
-					<iconify-icon icon={'material-symbols:login-sharp'}></iconify-icon>
-				</button>}
+				<div className={'popup-btns-container'}>
+					<button onClick={() => displayPopup(this, 'Login')} type={'button'} className={'popup-button login-popup-btn'}>
+						LOGIN
+						<iconify-icon icon={'material-symbols:login-sharp'}></iconify-icon>
+					</button>
 
-				{!this.state.displayPopup &&
-				<button onClick={() => this.displayPopup('Register')} type={'button'} className={'popup-button register-popup-btn'}>
-					REGISTER
-					<iconify-icon icon={'material-symbols:login-sharp'}></iconify-icon>
-				</button>}
+					<button onClick={() => displayPopup(this,'Register')} type={'button'} className={'popup-button register-popup-btn'}>
+						REGISTER
+						<iconify-icon icon={'mdi:register'}></iconify-icon>
+					</button>
+				</div>}
 
 				{this.state.displayPopup &&
 					<PopupForm
 						notifyDisplay={this.state.notification.display}
 						notifyDesc={this.state.notification.message}
-						closePopup={this.closePopup}
+						closePopup={() => closePopup(this)}
 						handleChange={this.handleChange}
 						handleLogin={this.handleLogin}
-						handlePassword={this.handlePassword}
 						handleRegistration={this.handleRegistration}
 						popupType={this.state.popupType}/>}
 

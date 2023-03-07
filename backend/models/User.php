@@ -2,25 +2,26 @@
 
 class User
 {
-	private int $id;
-	private string $name;
-	private string $email;
-	private string $password;
-	private string $jobTitle;
-	private string $phoneNo;
+	public int $id;
+	public string $name;
+	public string $email;
+	public string $password;
 
-	function __construct(string $name = null, string $email = null, string $password = null, string $jobTitle = null, string $phoneNo = null)
+	function __construct(string $name = null, string $email = null, string $password = null)
 	{
 		$this->name = $name;
 		$this->email = $email;
 		$this->password = $password;
-		$this->jobTitle = $jobTitle;
-		$this->phoneNo = $phoneNo;
 	}
 
 	public function getID(): int
 	{
 		return $this->id;
+	}
+
+	public function setId($id): void
+	{
+		$this->id = $id;
 	}
 
 	public function setName($name): void
@@ -53,43 +54,96 @@ class User
 		return $this->password;
 	}
 
-	public function setJobTitle($jobTitle): void
+	public function register($connection, $table, $confirmPassword): bool
 	{
-		$this->jobTitle = $jobTitle;
+		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
+		$stmt->bind_param("s", $this->email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+		$stmt->close();
+
+		if ($user !== null) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Email',
+					'message' => 'Email already exists!'
+				]
+			]);
+			exit();
+		}
+
+		if ($this->password !== $confirmPassword) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'Passwords do no match!'
+				]
+			]);
+			exit();
+		}
+
+		$hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+
+		$stmt = $connection->prepare("INSERT INTO $table (name, email, password) VALUES (?, ?, ?)");
+		$stmt->bind_param("sss", $this->name, $this->email, $hashedPassword);
+		$result = $stmt->execute();
+		$stmt->close();
+
+		return $result;
 	}
 
-	public function getJobTitle(): string
-	{
-		return $this->jobTitle;
+	public static function login($connection, $email, $password) {
+		$stmt = $connection->prepare('SELECT * FROM users WHERE email = ?');
+		$stmt->bind_param('s', $email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_assoc();
+
+		if (!$user) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Account',
+					'message' => 'Account doesnt exist!'
+				]
+			]);
+			exit();
+		}
+
+		if (!password_verify($password, $user['password'])) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'Passwords is incorrect!'
+				]
+			]);
+			exit();
+		}
+
+		$user_id = $user['id'];
+		setcookie('userID', $user_id, time() + (86400 * 30), '/');
+
+		return $user_id;
 	}
 
-	public function setPhoneNo($phoneNo): void
-	{
-		$this->phoneNo = $phoneNo;
-	}
+	public static function getUserById($connection, $user_id): ?User {
+		$stmt = $connection->prepare('SELECT * FROM users WHERE id = ?');
+		$stmt->bind_param('i', $user_id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_object();
+		$stmt->close();
 
-	public function getPhoneNo(): string
-	{
-		return $this->phoneNo;
-	}
+		if (!$user) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Account',
+					'message' => 'Account doesnt exist!'
+				]
+			]);
+			exit();
+		}
 
-	public function register($connection, $table): void
-	{
-		$stmt = $connection->prepare('INSERT INTO ' . $table . '(name, email, password, jobTitle, phoneNo) values(?, ?, ?, ? ,?)');
-	}
-
-	public function login($connection, $table): void
-	{
-
-	}
-
-	public function logout($connection, $table): void
-	{
-
-	}
-
-	public static function findUser($method): string
-	{
-		return '';
+		return new User($user->name, $user->email, $user->password);
 	}
 }

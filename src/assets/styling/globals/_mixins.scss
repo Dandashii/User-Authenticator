@@ -1,0 +1,76 @@
+@import 'variables';
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin box-shadow($x, $y, $blur, $c) {
+  -webkit-box-shadow: $x $y $blur $c;
+  -moz-box-shadow: $x $y $blur $c;
+  -ms-box-shadow: $x $y $blur $c;
+  box-shadow: $x $y $blur $c;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin box-dimensions($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin font-properties($color, $size, $weight) {
+  color: $color;
+  font-size: $size;
+  font-weight: $weight;
+}
+
+@mixin icon-size($size) {
+  font-size: $size;
+}
+
+@mixin center-abs() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin extra-small-screen {
+  @media (max-width: #{$extra-small-screen}) {
+    @content
+  }
+}
+
+@mixin phone-screen {
+  @media (max-width: #{$small-screen - 1px}) {
+    @content
+  }
+}
+
+@mixin medium-screen {
+  @media (max-width: #{$medium-screen - 1px}) {
+    @content
+  }
+}
+
+@mixin tablet-screen {
+  @media (min-width: #{$small-screen}) and (max-width: #{$medium-screen - 1px}) {
+    @content
+  }
+}
+
+@mixin shadow {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
+}
+
+@mixin layoutFormat {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  @include box-dimensions(40vw, 50px);
+}

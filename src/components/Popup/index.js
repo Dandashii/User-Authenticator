@@ -17,7 +17,7 @@ const PopupForm = (props) => {
 			<RegisterForm
 				notifyDisplay={props.notifyDisplay}
 				notifyDesc={props.notifyDesc}
-				handleChange={props.handleChange}
+				onChange={props.handleChange}
 				handleRegistration={props.handleRegistration}
 				closePopup={props.closePopup}
 				popupType={props.popupType}/>,
@@ -25,7 +25,7 @@ const PopupForm = (props) => {
 			<PasswordForm
 				notifyDisplay={props.notifyDisplay}
 				notifyDesc={props.notifyDesc}
-				handleChange={props.handleChange}
+				onChange={props.handleChange}
 				handlePassword={props.handlePassword}
 				closePopup={props.closePopup}
 				popupType={props.popupType}/>

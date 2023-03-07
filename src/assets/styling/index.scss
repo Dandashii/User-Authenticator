@@ -1,0 +1,27 @@
+@import "globals/variables";
+@import "globals/mixins";
+@import "layout/header";
+@import "layout/footer";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Source+Sans+Pro&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font;
+  background: $background-color;
+  color: $font-layout-color;
+  padding: 0;
+  margin: 0;
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+

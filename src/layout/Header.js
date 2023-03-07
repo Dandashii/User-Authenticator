@@ -1,7 +1,11 @@
 const Header = (props) => {
 	return (
 		<header>
-			<h1>{props.pageTitle}</h1>
+			<h1>
+				<span>
+					{props.pageTitle}
+				</span>
+			</h1>
 		</header>
 	);
 }

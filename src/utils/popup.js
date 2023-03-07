@@ -1,12 +1,12 @@
-export const displayPopup = (popupType) => {
-	this.setState({
+export const displayPopup = (thisArg, popupType) => {
+	thisArg.setState({
 		popupType: popupType,
 		displayPopup: true
 	});
 }
 
-export const closePopup = () => {
-	this.setState({
+export const closePopup = (thisArg) => {
+	thisArg.setState({
 		popupType: '',
 		displayPopup: false
 	});

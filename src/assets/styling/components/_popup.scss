@@ -1,0 +1,114 @@
+.popup-form {
+  position: relative;
+  width: 415px;
+  background: #E8E8E8;
+  @include shadow();
+  -webkit-transform: translate3d(0, 0, 0);
+  @include border-radius(25px);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 20px;
+
+  .close-popup-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    @include border-radius(10px);
+
+    iconify-icon {
+      @include icon-size(25px);
+      color: #727272;
+    }
+
+    &:hover {
+      background: lightgrey;
+      cursor: pointer;
+    }
+  }
+
+  h3 {
+    @include font-properties(#7B7B7B, 20px, bold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-bottom: 0px;
+  }
+
+  .input-container {
+    @include box-dimensions(100%, 42px);
+    display: flex;
+    color: white;
+    border: 1px solid #B1B1B1;
+    .label-container {
+      @include box-dimensions(35%, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      background: $label-background;
+      padding-left: 10px;
+
+      label {
+        @include font-properties(white, 14px, bold);
+        @include flex-center();
+        gap: 5px;
+
+        iconify-icon {
+          @include icon-size(20px);
+        }
+
+      }
+    }
+
+    input {
+      border: none;
+      padding-left: 5px;
+      @include box-dimensions(65%, 100%);
+      @include font-properties(#767676, 13px, normal);
+
+      &:focus {
+        outline: none
+      }
+    }
+  }
+
+  .confirm-password-container {
+    .label-container {
+      @include box-dimensions(45%, 100%);
+    }
+
+    input {
+      @include box-dimensions(55%, 100%);
+    }
+  }
+
+  .new-password-container {
+    .label-container {
+      @include box-dimensions(38%, 100%);
+    }
+
+    input {
+      @include box-dimensions(62%, 100%);
+    }
+  }
+
+  .notification-desc {
+    @include font-properties(#D8392B, 12px, bold);
+    margin: 0;
+  }
+
+  #login, #register, #save {
+    top: 0;
+    background: white;
+    border: 1px solid black;
+    padding: 5px 15px;
+    @include font-properties(black, 14px, bold);
+    margin-bottom: 15px;
+    margin-top: 20px;
+    
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

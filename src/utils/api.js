@@ -1,18 +1,18 @@
 import axios from "axios";
 
- export const sendData = (event, data, server, onSuccess) => {
+ export const sendData = (thisArg, event, data, server, onSuccess) => {
 	axios.post('http://localhost:8080/' + server, data)
 		.then(response => {
-			if (response.data.error) {
-				this.setState({
+			if (response.data.notification) {
+				thisArg.setState({
 					notification: {
-						type: response.data.error.type,
-						message: response.data.error.message,
+						type: response.data.notification.type,
+						message: response.data.notification.message,
 						display: true,
 					}
 				});
 			} else {
-				this.clearStates();
+				thisArg.clearStates();
 				event.target.reset();
 				onSuccess();
 			}

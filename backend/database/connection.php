@@ -1,9 +1,10 @@
 <?php
 
-$server = 'localhost';
+$server = '127.0.0.1';
 $username = 'root';
 $password = '';
 $database = 'eduly';
+$table = 'users';
 
 $connection = new mysqli($server, $username, $password, $database);
 

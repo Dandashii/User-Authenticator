@@ -8,13 +8,9 @@
 
 # Database schema
 
-<code>
-
-CREATE TABLE users (
+<code>CREATE TABLE users (
     id int AUTO_INCREMENT PRIMARY KEY,
     email varchar(255) NOT NULL UNIQUE,
     name varchar(100) NOT NULL,
     password varchar(300) NOT NULL
-);
-
-</code>
+);</code>

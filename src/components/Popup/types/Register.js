@@ -17,7 +17,7 @@ const RegisterForm = (props) => {
 						Full Name
 					</label>
 				</div>
-				<input onChange={props.onChange} type="text" name={'name'} id={'name'} placeholder={'Please enter your full name here'}/>
+				<input onChange={props.onChange} required={true} type="text" name={'name'} id={'name'} placeholder={'Please enter your full name here'}/>
 			</div>
 
 			<div className={'input-container email-container'}>
@@ -27,7 +27,7 @@ const RegisterForm = (props) => {
 						Email
 					</label>
 				</div>
-				<input onChange={props.onChange} type="email" name={'email'} id={'email'} placeholder={'Please enter your email here'}/>
+				<input onChange={props.onChange} required={true} type="email" name={'email'} id={'email'} placeholder={'Please enter your email here'}/>
 			</div>
 
 			<div className={'input-container password-container'}>
@@ -37,7 +37,7 @@ const RegisterForm = (props) => {
 						Password
 					</label>
 				</div>
-				<input onChange={props.onChange} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
+				<input onChange={props.onChange} required={true} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
 			</div>
 
 			<div className={'input-container confirm-password-container'}>
@@ -47,7 +47,7 @@ const RegisterForm = (props) => {
 						Confirm Password
 					</label>
 				</div>
-				<input onChange={props.onChange} type="password" name={'confirmPassword'} id={'confirmPassword'} placeholder={'Please confirm your password'}/>
+				<input onChange={props.onChange} required={true} type="password" name={'confirmPassword'} id={'confirmPassword'} placeholder={'Please confirm your password'}/>
 			</div>
 
 			{props.notifyDisplay && <Notification notifyDesc={props.notifyDesc}/>}

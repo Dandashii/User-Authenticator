@@ -16,7 +16,7 @@ const PasswordForm = (props) => {
 							Password
 						</label>
 					</div>
-					<input onChange={props.onChange} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
+					<input onChange={props.onChange} required={true} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
 				</div>
 
 				<div className={'input-container new-password-container'}>
@@ -26,7 +26,7 @@ const PasswordForm = (props) => {
 							New Password
 						</label>
 					</div>
-					<input onChange={props.onChange} type="password" name={'newPassword'} id={'newPassword'} placeholder={'Please enter a new password here'}/>
+					<input onChange={props.onChange} required={true} type="password" name={'newPassword'} id={'newPassword'} placeholder={'Please enter a new password here'}/>
 				</div>
 
 				<div className={'input-container confirm-password-container'}>
@@ -36,7 +36,7 @@ const PasswordForm = (props) => {
 							Confirm Password
 						</label>
 					</div>
-					<input onChange={props.onChange} type="password" name={'confirmPassword'} id={'confirmPassword'} placeholder={'Please confirm your new password'}/>
+					<input onChange={props.onChange} required={true} type="password" name={'confirmPassword'} id={'confirmPassword'} placeholder={'Please confirm your new password'}/>
 				</div>
 
 			{props.notifyDisplay && <Notification notifyDesc={props.notifyDesc}/>}

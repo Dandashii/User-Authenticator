@@ -16,7 +16,7 @@ const LoginForm = (props) => {
 						Email
 					</label>
 				</div>
-				<input onChange={props.onChange} type="email" name={'email'} id={'email'} placeholder={'Please enter your email here'}/>
+				<input onChange={props.onChange} required={true} type="email" name={'email'} id={'email'} placeholder={'Please enter your email here'}/>
 			</div>
 
 			<div className={'input-container password-container'}>
@@ -26,7 +26,7 @@ const LoginForm = (props) => {
 						Password
 					</label>
 				</div>
-				<input onChange={props.onChange} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
+				<input onChange={props.onChange} required={true} type="password" name={'password'} id={'password'} placeholder={'Please enter your password here'}/>
 			</div>
 
 			{props.notifyDisplay && <Notification notifyDesc={props.notifyDesc}/>}

@@ -93,42 +93,28 @@ class User
 		return $result;
 	}
 
-	public static function login($connection, $email, $password) {
-		$stmt = $connection->prepare('SELECT * FROM users WHERE email = ?');
-		$stmt->bind_param('s', $email);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$user = $result->fetch_assoc();
-
-		if (!$user) {
+	public static function login($connection, $table, $email, $password): ? User
+	{
+		if (empty($email)) {
 			echo json_encode([
 				'notification' => [
-					'type' => 'Account',
-					'message' => 'Account doesnt exist!'
-				]
-			]);
+					'type' => 'Email',
+					'message' => 'Email cannot be empty!'
+				]]);
 			exit();
 		}
 
-		if (!password_verify($password, $user['password'])) {
+		if (empty($password)) {
 			echo json_encode([
 				'notification' => [
 					'type' => 'Password',
-					'message' => 'Passwords is incorrect!'
-				]
-			]);
+					'message' => 'Password cannot be empty!'
+				]]);
 			exit();
 		}
 
-		$user_id = $user['id'];
-		setcookie('userID', $user_id, time() + (86400 * 30), '/');
-
-		return $user_id;
-	}
-
-	public static function getUserById($connection, $user_id): ?User {
-		$stmt = $connection->prepare('SELECT * FROM users WHERE id = ?');
-		$stmt->bind_param('i', $user_id);
+		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
+		$stmt->bind_param("s", $email);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		$user = $result->fetch_object();
@@ -144,6 +130,65 @@ class User
 			exit();
 		}
 
-		return new User($user->name, $user->email, $user->password);
+		if (!password_verify($password, $user->password)) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'Password is incorrect!'
+				]
+			]);
+			exit();
+		}
+
+		return new User($user->name, $user->email, $password);
+	}
+
+	public static function resetPassword($connection, $table, $email, $oldPassword, $newPassword, $confirmNewPassword): User
+	{
+		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
+		$stmt->bind_param("s", $email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$user = $result->fetch_object();
+		$stmt->close();
+
+		if (!password_verify($oldPassword, $user->password)) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'Current password is incorrect!'
+				]
+			]);
+			exit();
+		}
+
+		if ($oldPassword === $newPassword) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'New password cannot be the same as the current password!'
+				]
+			]);
+			exit();
+		}
+
+		if ($newPassword !== $confirmNewPassword) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Password',
+					'message' => 'New passwords do not match!'
+				]
+			]);
+			exit();
+		}
+
+		$hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+		$stmt = $connection->prepare("UPDATE $table SET password = ? WHERE email = ?");
+		$stmt->bind_param("ss", $hashedPassword, $email);
+		$result = $stmt->execute();
+		$stmt->close();
+
+		return new User($user->name, $user->email, $confirmNewPassword);
 	}
 }

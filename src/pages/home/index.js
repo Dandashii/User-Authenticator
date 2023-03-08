@@ -4,8 +4,9 @@ import Footer from "../../layout/Footer";
 import PopupForm from "../../components/Popup";
 import axios from "axios";
 import {sendData} from "../../utils/api";
-import {closePopup, displayPopup} from "../../utils/popup";
+import {displayPopup} from "../../utils/popup";
 import '../../assets/styling/pages/_home.scss';
+import { Navigate } from 'react-router-dom';
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -19,7 +20,8 @@ export default class Home extends React.Component {
 				type: '',
 				message: '',
 				display: false
-			}
+			},
+			isLoggedIn: false
 		};
 	}
 
@@ -45,10 +47,12 @@ export default class Home extends React.Component {
 			let formData = {...previousState.formData};
 			formData[event.target.name] = event.target.value;
 			return {
-				formData
+				formData,
+				notification: {
+					display: false
+				}
 			}
 		});
-		console.log(this.state);
 	}
 
 	handleLogin = (event) => {
@@ -59,7 +63,10 @@ export default class Home extends React.Component {
 		};
 
 		const onSuccess = () => {
-			window.location.href = 'http://localhost:3000/profile';
+			this.setState({
+				isLoggedIn: true
+			})
+			console.log(formData);
 		}
 
 		sendData(this, event, formData, 'login.php', onSuccess);
@@ -75,13 +82,27 @@ export default class Home extends React.Component {
 		};
 
 		const onSuccess = () => {
-			displayPopup(this, 'Login');
+			this.setState({
+				notification: {
+					type: 'Registration',
+					message: 'Successfully registered!',
+					display: true
+				}
+			});
+			setTimeout(() => {
+				this.clearStates();
+				displayPopup(this, 'Login');
+			}, 2000);
 		};
 
 		sendData(this, event, formData, 'register.php', onSuccess);
 	}
 
 	render() {
+		if (this.state.isLoggedIn) {
+			return <Navigate to="/profile"/>;
+		}
+
 		return (
 			<>
 				<Header pageTitle={this.state.pageTitle}/>
@@ -103,7 +124,7 @@ export default class Home extends React.Component {
 					<PopupForm
 						notifyDisplay={this.state.notification.display}
 						notifyDesc={this.state.notification.message}
-						closePopup={() => closePopup(this)}
+						closePopup={() => this.clearStates()}
 						handleChange={this.handleChange}
 						handleLogin={this.handleLogin}
 						handleRegistration={this.handleRegistration}

@@ -4,10 +4,3 @@ export const displayPopup = (thisArg, popupType) => {
 		displayPopup: true
 	});
 }
-
-export const closePopup = (thisArg) => {
-	thisArg.setState({
-		popupType: '',
-		displayPopup: false
-	});
-}

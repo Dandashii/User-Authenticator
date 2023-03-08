@@ -10,6 +10,7 @@
     background: none;
     border: none;
     @include shadow();
+    -webkit-transform: translate3d(0, 0, 0);
     @include border-radius(25px);
     @include box-dimensions(140px, 50px);
     @include flex-center();

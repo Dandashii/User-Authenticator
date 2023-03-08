@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
@@ -11,12 +10,9 @@ include 'database/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$formData = file_get_contents('php://input');
-
 	$formData = json_decode($formData);
 
-	$user = User::login($connection, $formData->email, $formData->password);
-
-	echo json_encode($user);
+	echo json_encode(User::login($connection, $table, $formData->email, $formData->password));
 }
 
 

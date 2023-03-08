@@ -4,9 +4,9 @@ import Footer from "../../layout/Footer";
 import axios from "axios";
 import {sendData} from "../../utils/api";
 import {displayPopup} from "../../utils/popup";
-import {closePopup} from "../../utils/popup";
 import PopupForm from "../../components/Popup";
 import '../../assets/styling/pages/_profile.scss';
+import {Navigate} from "react-router-dom";
 
 export default class Profile extends React.Component {
 	constructor(props) {
@@ -15,6 +15,8 @@ export default class Profile extends React.Component {
 			pageTitle: 'Profile Page',
 			popupType: '',
 			displayPopup: false,
+			loggedIn: true,
+			formData: {},
 			user: {
 				name: '',
 				email: '',
@@ -29,24 +31,12 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get('http://localhost:8080/getUser.php')
-			.then(response => {
-				if(response.data.notification) {
-					window.location.href = 'http://localhost:3000/';
-					console.log(response.data);
-				} else {
-					console.log(response.data);
-					this.setState({
-						user: {
-							name: response.data.name,
-							email: response.data.email,
-							password: response.data.password
-						}
-					});
-				}
-			}).catch(error => {
-			console.log(error);
-		});
+		const userData = sessionStorage.getItem('user');
+		if (userData) {
+			this.setState({ user: JSON.parse(userData), loggedIn: true});
+		} else {
+			this.setState({loggedIn: false});
+		}
 	}
 
 	componentWillUnmount() {
@@ -57,34 +47,69 @@ export default class Profile extends React.Component {
 		this.setState({
 			displayPopup: false,
 			popupType: '',
-			user: {
-				name: '',
-				email: '',
-				password: ''
+			formData: {},
+			notification: {
+				type: '',
+				message: '',
+				display: false
 			}
 		})
 	}
 
 	handleLogout = (event) => {
-		const onSuccess = () => {
-			window.location.href = 'http://localhost:3000/'
-		}
-
-		sendData(this, event, {}, 'logout.php', onSuccess);
+		sessionStorage.clear();
+		this.setState({
+			loggedIn: false
+		});
 	}
 
 	handlePassword = (event) => {
 		event.preventDefault();
 		const formData = {
+			email: this.state.user.email,
 			password: this.state.formData.password,
 			newPassword: this.state.formData.newPassword,
 			confirmPassword: this.state.formData.confirmPassword
 		};
 
-		sendData(event, formData, 'reset-password.php');
+
+		const onSuccess = () => {
+			this.setState({
+				notification: {
+					type: 'Password',
+					message: 'Password changed successfully!',
+					display: true
+				}
+			});
+
+			setTimeout(() => {
+				this.clearStates();
+				const userData = sessionStorage.getItem('user');
+				this.setState({ user: JSON.parse(userData), loggedIn: true});
+			}, 2000);
+		};
+
+		sendData(this, event, formData, 'reset-password.php', onSuccess);
+	}
+
+	handleChange = (event) => {
+		this.setState((previousState) => {
+			let formData = {...previousState.formData};
+			formData[event.target.name] = event.target.value;
+			return {
+				formData,
+				notification: {
+					display: false
+				}
+			}
+		});
 	}
 
 	render() {
+		if (this.state.loggedIn === false) {
+			return <Navigate to="/"/>;
+		}
+
 		return (
 			<>
 				<Header pageTitle={this.state.pageTitle}/>
@@ -104,7 +129,9 @@ export default class Profile extends React.Component {
 						<div className={'profile-label-container'} style={{borderLeft: '5px solid black'}}>
 							<iconify-icon icon={'mdi:email'}></iconify-icon>
 						</div>
-						<p className={'profile-text-container profile-password'}>{this.state.user.password}</p>
+						<p className={'profile-text-container profile-password'}>
+							{this.state.user.password.replace(/./g, "*")}
+						</p>
 					</div>
 
 					<button onClick={() => displayPopup(this,'Password')} type={'button'} className={'change-password-btn'}>
@@ -118,7 +145,7 @@ export default class Profile extends React.Component {
 					<PopupForm
 						notifyDisplay={this.state.notification.display}
 						notifyDesc={this.state.notification.message}
-						closePopup={() => closePopup(this)}
+						closePopup={() => this.clearStates()}
 						handleChange={this.handleChange}
 						handlePassword={this.handlePassword}
 						popupType={this.state.popupType}/>}

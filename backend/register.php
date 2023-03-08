@@ -11,7 +11,6 @@ include 'database/connection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$formData = file_get_contents('php://input');
 
-	//Retrieved data from the component
 	$formData = json_decode($formData);
 
 	$user = new User($formData->name, $formData->email, $formData->password);

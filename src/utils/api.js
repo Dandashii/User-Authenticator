@@ -12,7 +12,8 @@ import axios from "axios";
 					}
 				});
 			} else {
-				thisArg.clearStates();
+				console.log(response.data);
+				sessionStorage.setItem('user', JSON.stringify(response.data));
 				event.target.reset();
 				onSuccess();
 			}

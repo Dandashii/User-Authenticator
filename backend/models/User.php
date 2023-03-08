@@ -66,11 +66,11 @@ class User
 			exit();
 		}
 
-		if (!ctype_alpha($this->name)) {
+		if (!preg_match('/^[a-zA-Z\s]+$/', $this->name)) {
 			echo json_encode([
 				'notification' => [
 					'type' => 'Name',
-					'message' => 'Your name can only contain letters!'
+					'message' => 'Your name can only contain letters and spaces!'
 				]
 			]);
 			exit();
@@ -89,7 +89,7 @@ class User
 		if (strlen($this->password) < 8 || strlen($this->password) > 30) {
 			echo json_encode([
 				'notification' => [
-					'type' => 'Name',
+					'type' => 'Password',
 					'message' => 'Password can only be between 8 and 30 characters long!'
 				]
 			]);
@@ -99,7 +99,7 @@ class User
 		if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,30}$/', $this->password)) {
 			echo json_encode([
 				'notification' => [
-					'type' => 'Name',
+					'type' => 'Password',
 					'message' => 'Password should contain numbers, letters, and special characters!'
 				]
 			]);
@@ -184,7 +184,7 @@ class User
 			if (strlen($pass) < 8 || strlen($pass) > 30) {
 				echo json_encode([
 					'notification' => [
-						'type' => 'Name',
+						'type' => 'Password',
 						'message' => 'Password can only be between 8 and 30 characters long!'
 					]
 				]);
@@ -194,7 +194,7 @@ class User
 			if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,30}$/', $pass)) {
 				echo json_encode([
 					'notification' => [
-						'type' => 'Name',
+						'type' => 'Password',
 						'message' => 'Password should contain numbers, letters, and special characters!'
 					]
 				]);

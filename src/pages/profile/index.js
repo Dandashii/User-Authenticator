@@ -116,29 +116,36 @@ export default class Profile extends React.Component {
 
 				{!this.state.displayPopup &&
 				<section className={'profile-container'}>
-					<h3>{this.state.user.name}</h3>
-
-					<div className={'profile-email-container'}>
-						<div className={'profile-label-container'} style={{borderLeft: '5px solid black'}}>
-							<iconify-icon icon={'mdi:email'}></iconify-icon>
-						</div>
-						<p className={'profile-text-container profile-email'}>{this.state.user.email}</p>
+					<div className={'profile-logged-header'}>
+						<p>YOU ARE CURRENTLY LOGGED IN AS</p>
 					</div>
+					<div className={'profile-data-container'}>
+						<h3>{this.state.user.name}</h3>
 
-					<div className={'profile-password-container'}>
-						<div className={'profile-label-container'} style={{borderLeft: '5px solid black'}}>
-							<iconify-icon icon={'mdi:email'}></iconify-icon>
+						<div className={'data-container profile-email-container'}>
+								<iconify-icon icon={'mdi:email'}></iconify-icon>
+							<div className={'profile-text-container profile-email'}>
+								<span>
+									{this.state.user.email}
+								</span>
+							</div>
 						</div>
-						<p className={'profile-text-container profile-password'}>
-							{this.state.user.password.replace(/./g, "*")}
-						</p>
+
+						<div className={'data-container profile-password-container'}>
+							<iconify-icon icon={'mdi:password'}></iconify-icon>
+							<div className={'profile-text-container profile-password'}>
+								<span>
+									{this.state.user.password.replace(/./g, "*")}
+								</span>
+							</div>
+						</div>
+
+						<button onClick={() => displayPopup(this,'Password')} type={'button'} className={'change-password-btn'}>
+							Change Password
+						</button>
+
+						<button onClick={this.handleLogout} className={'logout-btn'}>LOGOUT</button>
 					</div>
-
-					<button onClick={() => displayPopup(this,'Password')} type={'button'} className={'change-password-btn'}>
-						Change Password
-					</button>
-
-					<button onClick={this.handleLogout} className={'logout-btn'}>LOGOUT</button>
 				</section>}
 
 				{this.state.displayPopup &&

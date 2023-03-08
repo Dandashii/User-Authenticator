@@ -2,3 +2,77 @@
 @import "../globals/variables";
 @import "../components/popup";
 
+.profile-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  .profile-logged-header {
+    font-size: 12px;
+    background: #D5D5D5;
+    border-radius: 25px 25px 0px 0px;
+    padding: 5px 20px;
+  }
+
+  .profile-data-container {
+    background: #EEEDED;
+    border: 1px solid #cccccc;
+    @include shadow();
+    @include border-radius(10px);
+    width: 415px;
+    @include flex-center();
+    flex-flow: column nowrap;
+    gap: 15px;
+    -webkit-transform: translate3d(0, 0, 0);
+
+    h3 {
+      @include font-properties(#737373, 18px, bold);
+    }
+
+    .data-container {
+      font-family: 'Times New Roman', sans-serif;
+      background: white;
+      border-left: 5px solid #959595;
+      @include box-dimensions(100%, 45px);
+      display: flex;
+      align-items: center;
+      align-content: center;
+      gap: 20px;
+      padding-left: 15px;
+      iconify-icon {
+        color: #686868;
+        font-size: 20px;
+      }
+
+      .profile-text-container {
+        display: flex;
+        align-items: center;
+        @include box-dimensions(70%, 100%);
+        span {
+          @include font-properties(rgba(35, 41, 44, 0.75), 14px, lighter);
+        }
+      }
+    }
+
+    .change-password-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      @include font-properties(#464646, 12px, bold);
+      margin-top: 10px;
+    }
+
+    .logout-btn {
+      background: #595959;
+      border: none;
+      color: white;
+      padding: 7px 10px;
+      font-size: 14px;
+      margin: 20px 20px 10px auto;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+  }
+}

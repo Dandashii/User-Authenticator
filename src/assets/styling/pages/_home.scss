@@ -6,6 +6,10 @@
   @include flex-center();
   gap: 100px;
 
+  @include phone-screen() {
+    flex-flow: column;
+  }
+
   .popup-button {
     background: none;
     border: none;

@@ -10,6 +10,10 @@
   align-items: center;
   gap: 20px;
 
+  @include phone-screen() {
+    width: 95vw;
+  }
+
   .close-popup-btn {
     position: absolute;
     top: 10px;
@@ -41,6 +45,12 @@
     display: flex;
     color: white;
     border: 1px solid #B1B1B1;
+    @include extra-small-screen() {
+      flex-flow: column nowrap;
+      height: 80px;
+      border: none;
+    }
+
     .label-container {
       @include box-dimensions(35%, 100%);
       display: flex;
@@ -48,6 +58,9 @@
       justify-content: left;
       background: $label-background;
       padding-left: 10px;
+      @include extra-small-screen() {
+        width: 100%;
+      }
 
       label {
         @include font-properties(white, 14px, bold);
@@ -57,7 +70,6 @@
         iconify-icon {
           @include icon-size(20px);
         }
-
       }
     }
 
@@ -66,6 +78,10 @@
       padding-left: 5px;
       @include box-dimensions(65%, 100%);
       @include font-properties(#767676, 13px, normal);
+
+      @include extra-small-screen() {
+        width: 100%;
+      }
 
       &:focus {
         outline: none
@@ -76,25 +92,39 @@
   .confirm-password-container {
     .label-container {
       @include box-dimensions(45%, 100%);
+
+      @include extra-small-screen() {
+        width: 100%;
+      }
     }
 
     input {
       @include box-dimensions(55%, 100%);
+      @include extra-small-screen() {
+        width: 100%;
+      }
     }
   }
 
   .new-password-container {
     .label-container {
       @include box-dimensions(38%, 100%);
+      @include extra-small-screen() {
+        width: 100%;
+      }
     }
 
     input {
       @include box-dimensions(62%, 100%);
+      @include extra-small-screen() {
+        width: 100%;
+      }
     }
   }
 
   .notification-desc {
-    @include font-properties(#D8392B, 12px, bold);
+    text-align: center;
+    @include font-properties(#D8392B, 11px, bold);
     margin: 0;
   }
 

@@ -10,7 +10,6 @@ include 'database/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$formData = file_get_contents('php://input');
-
 	$formData = json_decode($formData);
 
 	echo json_encode(User::resetPassword($connection, $table, $formData->email, $formData->password,

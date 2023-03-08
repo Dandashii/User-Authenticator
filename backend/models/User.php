@@ -56,6 +56,56 @@ class User
 
 	public function register($connection, $table, $confirmPassword): bool
 	{
+		if (strlen($this->name) > 40) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Name',
+					'message' => 'Your name cannot be longer than 40 characters!'
+				]
+			]);
+			exit();
+		}
+
+		if (!ctype_alpha($this->name)) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Name',
+					'message' => 'Your name can only contain letters!'
+				]
+			]);
+			exit();
+		}
+
+		if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Email',
+					'message' => 'Invalid email address!'
+				]
+			]);
+			exit();
+		}
+
+		if (strlen($this->password) < 8 || strlen($this->password) > 30) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Name',
+					'message' => 'Password can only be between 8 and 30 characters long!'
+				]
+			]);
+			exit();
+		}
+
+		if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,30}$/', $this->password)) {
+			echo json_encode([
+				'notification' => [
+					'type' => 'Name',
+					'message' => 'Password should contain numbers, letters, and special characters!'
+				]
+			]);
+			exit();
+		}
+
 		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
 		$stmt->bind_param("s", $this->email);
 		$stmt->execute();
@@ -95,23 +145,6 @@ class User
 
 	public static function login($connection, $table, $email, $password): ? User
 	{
-		if (empty($email)) {
-			echo json_encode([
-				'notification' => [
-					'type' => 'Email',
-					'message' => 'Email cannot be empty!'
-				]]);
-			exit();
-		}
-
-		if (empty($password)) {
-			echo json_encode([
-				'notification' => [
-					'type' => 'Password',
-					'message' => 'Password cannot be empty!'
-				]]);
-			exit();
-		}
 
 		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
 		$stmt->bind_param("s", $email);
@@ -145,6 +178,30 @@ class User
 
 	public static function resetPassword($connection, $table, $email, $oldPassword, $newPassword, $confirmNewPassword): User
 	{
+		$passwords = [$newPassword, $confirmNewPassword];
+
+		foreach ($passwords as $pass) {
+			if (strlen($pass) < 8 || strlen($pass) > 30) {
+				echo json_encode([
+					'notification' => [
+						'type' => 'Name',
+						'message' => 'Password can only be between 8 and 30 characters long!'
+					]
+				]);
+				exit();
+			}
+
+			if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,30}$/', $pass)) {
+				echo json_encode([
+					'notification' => [
+						'type' => 'Name',
+						'message' => 'Password should contain numbers, letters, and special characters!'
+					]
+				]);
+				exit();
+			}
+		}
+
 		$stmt = $connection->prepare("SELECT * FROM $table WHERE email = ?");
 		$stmt->bind_param("s", $email);
 		$stmt->execute();

@@ -6,6 +6,12 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  width: 415px;
+
+  @include phone-screen() {
+    width: 95vw;
+  }
+
   .profile-logged-header {
     font-size: 12px;
     background: #D5D5D5;
@@ -14,11 +20,11 @@
   }
 
   .profile-data-container {
+    width: 100%;
     background: #EEEDED;
     border: 1px solid #cccccc;
     @include shadow();
     @include border-radius(10px);
-    width: 415px;
     @include flex-center();
     flex-flow: column nowrap;
     gap: 15px;

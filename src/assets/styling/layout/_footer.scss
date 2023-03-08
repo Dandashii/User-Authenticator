@@ -7,5 +7,12 @@ footer {
 
   p {
     font-size: $footer-font-size;
+    @include phone-screen() {
+      font-size: 5vw;
+    }
+  }
+
+  @include phone-screen() {
+    @include box-dimensions(100vw, 80px);
   }
 }
